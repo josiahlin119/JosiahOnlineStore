@@ -12,12 +12,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 
 
 
@@ -56,8 +59,14 @@ public class OnlineStoreDAO extends HttpServlet {
 
 	protected void connect_func() {
 		try {
+			
+			
 			if (connect == null || connect.isClosed()) {
 				try {
+					//set the default timezone to EST 
+					TimeZone currentTimeZone = TimeZone.getTimeZone("EST");
+					TimeZone.setDefault(currentTimeZone);
+					
 					Class.forName("com.mysql.cj.jdbc.Driver"); // use old driver for school webserver
 				} catch (ClassNotFoundException e) {
 
@@ -103,9 +112,10 @@ public class OnlineStoreDAO extends HttpServlet {
 					" itemid  integer AUTO_INCREMENT,\n" + 
 					" sellerId varchar(50),\n" + 
 					" title varchar(100),\n" + 
-					" description varchar(255),\n" + 
+					" descriptions varchar(255),\n" + 
 					" price integer,\n" + 
-					" Primary key(itemId), \n" + 
+					" Primary key(itemId),"
+					+ "foreign key(sellerId) references Users(userid), \n" + 
 					" postTime date\n" + 
 					" );";
 
@@ -145,14 +155,14 @@ public class OnlineStoreDAO extends HttpServlet {
 					+ "    end if;\n" + "    end;\n";
 			final String noMoreThanFiveItemsPerDay = " create  trigger  noMoreThanFiveItemsPerDay before insert on Items for each row \n"
 					+ "				    begin\n"
-					+ "				    if (select COUNT(*) from Items I where I = NEW.sellerId and  J.postTime = curdate() group by I.sellerId ,J.postTime) >=5 then \n"
+					+ "				    if (select COUNT(*) from Items I where I.sellerId = NEW.sellerId and  I.postTime = curdate() group by I.sellerId ,new.postTime) >=5 then \n"
 					+ "				       SIGNAL SQLSTATE '45000'\n"
 					+ "                       set message_text = \"Cannot post more than five items per day\";\n"
 					+ "                    end if; \n" + "                    end; ";
 
 			final String onlyOneReviewOnSameItem = "create trigger onlyOneReviewOnSameItem before insert on Reviews for each row\n"
 					+ "				begin \n"
-					+ "                if(select count(*) from Review R where R.userId  = New.userId AND itemId = New.itemId) >= 1 then \n"
+					+ "                if(select count(*) from Review R where R.userId  = New.userId AND R.itemId = New.itemId) >= 1 then \n"
 					+ "                SIGNAL SQLSTATE '45000'\n"
 					+ "                set message_text = \"You cannot write more than one review to the same item\";\n"
 					+ "                end if;\n" + "                end; ";
@@ -162,8 +172,13 @@ public class OnlineStoreDAO extends HttpServlet {
 					"('Ming','111','Ming','Jin','Jin@gmail.com','M','2000-02-02',1),('Jacob','111','Jacob','Billy','Jb@gmail.com','M','2000-02-02',1),\n" + 
 					"('Wen','111','Wendy','Tung','wen@gmail.com','M','2000-02-02',1),('Patrick','111','Patrick','Chu','techlead@gmail.com','M','2000-02-02',1),\n" + 
 					"('Jonah','111','Jonah','Wilber','JWb0@gmail.com','M','2000-02-02',1),('Jonathan','111','Jonathan','Ma','Joma@gmail.com','M','2000-02-02',1);";
+			final String insertItem = "insert into  Items (sellerId,  title,   descriptions, price, postTime) values('Ming',\n" + 
+					" 'ok', 'desc lll', 12, '2019-01-01');";
+			final String anotherItem = "insert into Items (sellerId,title) values('Wen','Phone');";
+			final String insertCat = "insert into Categories values(1,'electronics'),(1,'apple');";
+			
 			String[] stmt = { setting,setGlobalTime,setSessionTime,dropAllTables,Users, favoriteSellers, Items,Categories, favoriteItems, Reviews, purchaseOrder,itemsInOrder,
-					shoppingCart, itemsInShoppingCart,initializeUserTable};
+					shoppingCart, itemsInShoppingCart};
 			for (int i = 0; i < stmt.length; i++) {
 		
 				statement.executeUpdate(stmt[i]);
@@ -175,6 +190,15 @@ public class OnlineStoreDAO extends HttpServlet {
 			String[] triggers = { noMoreThanFiveReviewsPerDay, noMoreThanFiveItemsPerDay, onlyOneReviewOnSameItem };
 			for (int j = 0; j < triggers.length; j++) {
 				statement.execute(triggers[j]);
+			}
+			
+			String [] insertStatement = {
+					initializeUserTable,insertItem,anotherItem,insertCat
+			};
+			//I deliberately insert statments after trigger to make sure the
+			//the queries in triggers are functioning well. 
+			for(int k = 0; k < insertStatement.length; k++) {
+				statement.execute(insertStatement[k]);
 			}
 			// here comes a thing. If the queries ahead of triggers have some integrity
 			// violation, then the rest of queries will not be executed
@@ -199,8 +223,10 @@ public class OnlineStoreDAO extends HttpServlet {
 		System.out.println("getUserList");
 		List<Users> listUsers = new ArrayList<Users>();
 		String sql = "Select * from Users;";
-		
+		System.out.println("Catch error createsetatement 1111111111111111");
 		sm = (Statement) connect.createStatement();
+		System.out.println("Catch error createstsatement 2222222222222222);"
+				);
 		ResultSet rs = sm.executeQuery(sql);
 
 		while (rs.next()) {
@@ -276,6 +302,72 @@ public class OnlineStoreDAO extends HttpServlet {
 
 		return true;
 
+	}
+	
+	
+	public ArrayList<Items> getAllItems() throws SQLException {
+		ArrayList<Items> allItems = new ArrayList<>();
+		connect_func();
+		System.out.print("In getALlItems in dao");
+		String getItems =
+				"Select * from Items I, Categories C where I.itemId = C.itemId;" ;		
+		ps = connect.prepareStatement(getItems);
+		
+		rs = ps.executeQuery();
+		
+		while (rs.next()) {
+			int itemId = rs.getInt("itemId");
+			String title = rs.getString("title");
+			String descriptions = rs.getString("descriptions");
+			int price = rs.getInt("price");
+			String sellerId = rs.getString("sellerId");
+			java.sql.Date postTime = rs.getDate("postTime");
+			System.out.print(1 + " of Retrieve Item with cat");
+			String category = rs.getString("label");
+			Items theItem = Items.createItemsInDAO(itemId, sellerId, title, descriptions, price, postTime,category);
+			allItems.add(theItem);
+			System.out.println(theItem.getCategory() + "The name the item");
+		}
+		
+		rs.close();
+		ps.close();
+		connect.close();
+		
+		System.out.println("Finish getAll items");
+		return allItems;
+	}
+	
+	
+
+	public ArrayList<Items> searchItems(String category) throws SQLException {
+		ArrayList<Items> allItems = new ArrayList<>();
+		connect_func();
+		System.out.print("In searchItem in dao");
+		String getItems =
+				"Select * from Items I, Categories C where I.itemId = C.itemId And C.label = ?;" ;		
+		ps = connect.prepareStatement(getItems);
+		ps.setString(1, category);
+		rs = ps.executeQuery();
+		
+		while (rs.next()) {
+			int itemId = rs.getInt("itemId");
+			String title = rs.getString("title");
+			String descriptions = rs.getString("descriptions");
+			int price = rs.getInt("price");
+			String sellerId = rs.getString("sellerId");
+			java.sql.Date postTime = rs.getDate("postTime");
+			System.out.print(1 + " of Retrieve Item with cat");
+			Items theItem = Items.createItemsInDAO(itemId, sellerId, title, descriptions, price, postTime,category);
+			allItems.add(theItem);
+			System.out.println(theItem.getCategory() + "The name the item");
+		}
+		
+		rs.close();
+		ps.close();
+		connect.close();
+		
+		System.out.println("Finish searching items");
+		return allItems;
 	}
 	
 	

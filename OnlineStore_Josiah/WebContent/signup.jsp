@@ -12,7 +12,16 @@
 body {
 	font-family: Arial, Helvetica, sans-serif;
 	background-color: black;
+height: 1200px;
+  background-position: center;
+  background-repeat: repeat;
+  background-size: 900px 1100px;
+  position: relative;
+  
 }
+
+
+
 
 * {
 	box-sizing: border-box;
@@ -23,14 +32,20 @@ body {
 	padding: 16px;
 	background-color: white;
 }
+form{
+	top: 200px;
+	width: 600px;
+	left:960px;
+	position: absolute;
 
+}
 /* Full-width input fields */
 input[type=text],input[type=email], input[type=password] {
 	width: 100%;
 	padding: 15px;
 	margin: 5px 0 22px 0;
 	display: inline-block;
-	border: none;
+	border: 1px solid yellow;
 	background: #f1f1f1;
 }
 
@@ -91,6 +106,7 @@ a {
 				
 			
 				%>
+				
 <form action="OnlineStoreControlServlet" method="post">
 							<input type="hidden" name="action" value="signup" required/>
 			<div class="container">

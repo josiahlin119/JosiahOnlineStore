@@ -11,37 +11,75 @@
 <meta charset="UTF-8">
 
 </head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+* {box-sizing: border-box;}
+
+.formWrapper input[type=text], textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: darkturquoise;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: mediumspringgreen;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  width: 20%;
+  position: absolute;
+  top: 30%;
+  left: 40%;
+  
+}
+</style>
+
 <body>
 
 
+		
 
-	<div id="cover">
-		<form method="Post" action="OnlineStoreControlServlet">
-			<input type="hidden" name="action" value="searchItemWithCategory" />
-			<div class="tb">
-				<div class="td">
-					<input type="text" name="Category" placeholder="Category" required>
-				</div>
-				<div class="td" id="s-cover">
-					<button type="submit" value="search">
-						<div id="s-circle"></div>
-						<span></span>
-					</button>
-				</div>
-			</div>
-		</form>
-	</div>
+<div class="container">
+<div class ="formWrapper"> 
+ <form method="Post" action="OnlineStoreControlServlet">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" placeholder="Title Of Item...">
 
+    <label for="Price">Price</label>
+    <input type="text" id="price" name="price" placeholder="Set a price...">
 
-	<br />
-	<br />
+    <label for="category">Categories</label>
+    <input type="text" id="category" name="category" placeholder="...#...#...">
+    
+    <label for="description">Subject</label>
+    <textarea id="description" name="description" placeholder="Write a brief description of this item..." style="height:100px"></textarea>
 
-	<!-- The id of the session user is hidden in request so i dont need to explicity add it here -->
-
-	<br />
-	<br />
-	<br />
-
+    <input type="submit" value="Post Item">
+  </form>
+  
+  
+  
+  </div>
+</div>
 	<c:if test="${theJoke != null}">
 		<font size="6" color="red">You have successfully posted your
 			item</font>

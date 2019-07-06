@@ -29,8 +29,9 @@ input {
 }
 
 table {   
-	border-style:none;
+	border-style: dotted solid double;
 	width:50%;
+	border: 1px solid black;
 }
 
 tr:nth-child(even) {background: #FFFFFF}

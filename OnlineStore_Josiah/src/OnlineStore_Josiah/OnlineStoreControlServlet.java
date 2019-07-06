@@ -4,6 +4,7 @@ package OnlineStore_Josiah;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -69,11 +70,47 @@ public class OnlineStoreControlServlet extends HttpServlet {
 		case "initialize":
 			try {
 				initialize(request,response);
+				break;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		case "searchItemsByCategory":
+			try {
+				searchItems(request,response);
+				System.out.print("After search item");
+				break;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		case "getItem":
+			try {
+				getItemForReview(request,response);
+				break;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
 		}
+	}
+	
+	private void getItemForReview(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		//This item is certainly in the list of all items, let's create a method in Dao named getAllItems;
+		String itemId = request.getParameter("itemId");
+		System.out.println("The item id is : ======: " + itemId);
+		ArrayList<Items> allItems = onlineStoreDao.getAllItems();
+		for(Items theItem: allItems) {
+			if(theItem.getItemId() == Integer.parseInt(itemId)) {
+				request.getSession().setAttribute("theItem", theItem);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/reviewItem.jsp");
+				dispatcher.forward(request, response);
+			}
+		}
+		
+	}
+	private void reviewItem(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+		
+		
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -81,6 +118,16 @@ public class OnlineStoreControlServlet extends HttpServlet {
 	}
 
 	
+	private void searchItems(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		System.out.print("In serach itrem servelet");
+		String category = request.getParameter("category");
+		System.out.println("Print category" + category);
+		ArrayList<Items> items = onlineStoreDao.searchItems(category);
+		request.getSession().setAttribute("items", items);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/searchItemsResults.jsp");
+		dispatcher.forward(request, response);
+		
+	}
 	
 	private void signup(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ServletException {
 

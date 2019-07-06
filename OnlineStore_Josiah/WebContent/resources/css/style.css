@@ -9,11 +9,12 @@ table {
 	border-bottom:1px solid #3eeeb9;
 	font-family: Tahoma,Verdana,Segoe,sans-serif;
 	width:100%;
-}
+	border-style: none ;
+
  
 	border-bottom:1px solid #65b498;
 	padding:10px;
-	color: #FFFFFF;
+	
 }
 
 tr {

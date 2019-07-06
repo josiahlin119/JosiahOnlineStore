@@ -12,6 +12,13 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+
+th, td {
+  padding:20px;
+  text-align: left;
+  border: 1px solid purple;
+}
+
 body {
 	background-color: #b3eeec;
 	font-family: cursive;
@@ -81,6 +88,8 @@ a:hover, a:active {
 					<div id="content">
 					
 					<form>
+					<br/><br/>
+					<br/><br/>
 						<table>
 							<tr>
 								<th>Name</th>
@@ -105,7 +114,7 @@ a:hover, a:active {
 							<c:param name="action" value="initialize" />
 						</c:url>
 						
-					
+					<br/><br/><br/><br/>
 						<nav class="cl-effect-17">
 							<a href="DataManagement.jsp"> Data </a> <a href="${tempLink}">Initialize</a>
 						</nav>

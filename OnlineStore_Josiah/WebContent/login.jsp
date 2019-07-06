@@ -10,11 +10,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
-  background-image: url("/OnlineStore_Josiah/resources/sale.jpg");
+  background-image: url("/OnlineStore_Josiah/resources/shopping.jpg");
  
-   height: 1500px;
+   height: 1200px;
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-size: 900px 1100px;
   position: relative;
   
@@ -28,9 +28,11 @@ input[type=text], input[type=password] {
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 1px solid yellow;
   box-sizing: border-box;
+ background: #f1f1f1;
 }
+
 
 /* Set a style for all buttons */
 button {
@@ -86,8 +88,8 @@ span.psw {
   z-index: 1; /* Sit on top */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
+  width: 30%; /* Full width */
+  height: 30%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
@@ -99,7 +101,7 @@ span.psw {
   background-color: #fefefe;
   margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 20%; /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button (x) */
@@ -143,14 +145,17 @@ span.psw {
   .cancelbtn {
      width: 100%;
   }
+  h2{
+  postion:center;
+  }
 }
 </style>
 </head>
 <body>
 
-<center>
 
-<h1><font color = "deeppink">Josiah's Online Store</font></h1>
+
+
 
 
 	<c:if test="${successfullyRegistered != null}">
@@ -158,26 +163,26 @@ span.psw {
 	</c:if>
 <br/>
 
-<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Click Here to Pop the Login Form</button>
-</center>
-<div id="id01" class="modal">
-  
+
+
   
   <form class="modal-content animate" action="OnlineStoreControlServlet" method="post">
   
 							<input type="hidden" name="action" value="login" required/>
+							
+							<h2><font color = "deeppink"> Josiah's Online Store</font></h2>
     <div class="imgcontainer">
-      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
       
       
-      <img src="/OnlineStore_Josiah/resources/onlineStore.png"  alt="Online Store" style="width:500px;height:400px;"class="avatar">
+      
+      <img src="/OnlineStore_Josiah/resources/onlineStore.png"  alt="Online Store" style="width:30%;height:25%;"class="avatar">
     </div>
 
     <div class="container">
-      <label for="userId"><b>User Id</b></label>
+      <label for="userId"><b>&nbsp User Id</b></label>
       <input type="text" placeholder="User Id" name="userId" required>
 
-      <label for="password"><b>Password</b></label>
+      <label for="password"><b> &nbsp Password</b></label>
       <input type="password" placeholder="Password" name="password" required>
         
       <button type="submit">Login</button>
@@ -186,7 +191,7 @@ span.psw {
     
     
        <div class="container" style="background-color:#f1f1f1">
-      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+     
      
       <div class="container signin">
    <p>You don't have an account? <a href="signup.jsp">Sign up</a>.</p>
@@ -197,22 +202,10 @@ span.psw {
      </form>
 
  
- </div>
  
 
 
 
-<script>
-// Get the modal
-var modal = document.getElementById('id01');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-</script>
 
 </body>
 </html>

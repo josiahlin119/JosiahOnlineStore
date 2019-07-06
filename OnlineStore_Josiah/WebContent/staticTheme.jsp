@@ -7,26 +7,23 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Josiah's Joke Hub</title>
+<title>Josiah's Online Store</title>
 
-<link type="text/css" rel="stylesheet" href="resources/css/style.css">
-<link rel="stylesheet" href='resources/css/searchBar.css'>
-<link rel="stylesheet" href='resources/css/component.css'>
-<link rel='stylesheet'
-	href='https://fonts.googleapis.com/css?family=Nunito'>
 
+<link type="text/css" rel="stylesheet" href="resources/css/topNav.css">
 
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
-  background-color: pink;
+  background-color: lemonchiffon;
   font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .glow {
   font-size: 50px;
-  color:#FFD700;
+  color:seashell;
   text-align: center;
   -webkit-animation: glow 1s ease-in-out infinite alternate;
   -moz-animation: glow 1s ease-in-out infinite alternate;
@@ -35,15 +32,15 @@ body {
 
 @-webkit-keyframes glow {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #40E0D0, 0 0 40px #40E0D0, 0 0 50px #40E0D0, 0 0 60px #40E0D0, 0 0 80px #40E0D0;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px palegreen, 0 0 40px palegreen, 0 0 50px palegreen, 0 0 60px palegreen, 0 0 80px palegreen;
   }
   
   to {
-    text-shadow: 0 0 20px #fff, 0 0 30px #00CED1, 0 0 40px #00CED1, 0 0 50px #00CED1, 0 0 60px #00CED1, 0 0 70px #00CED1, 0 0 90px #00CED1;
+    text-shadow: 0 0 20px #fff, 0 0 30px lime, 0 0 40px lime, 0 0 50px lime, 0 0 60px lime, 0 0 70px lime, 0 0 90px lime;
   }
 }
 </style>
-
+<body>
 <h2 >
 <font face="verdana" color="mediumblue">
 	<%
@@ -53,43 +50,30 @@ body {
 </font>
 </h2>
 
-
-
 <h2 class="glow">Josiah's Online Store </h2>
 
 
 
-<c:url var="logoutLink" value="OnlineStoreControlServlet">
-	<c:param name="action" value="logout" />
-</c:url>
-<!-- Use this url to ban the certain user -->
-<nav class="cl-effect-13">
-	<div id="right">
-		<a href="${logoutLink }"> Log Out</a>
-	</div>
-</nav>
+ <div class="topnav">
+  <a class ="logout" href ="login.jsp">Log Out</a>
+  <a class="active" href="home.jsp">Home</a>
+  
+  <a href="#about">Favorite Sellers</a>
+  <a href="#contact">Favorite Items</a>
+ 
+  <div class="search-container">
+  
+    <form method="Post" action="OnlineStoreControlServlet">
+			<input type="hidden" name="action" value="searchItemsByCategory" />
+		
+					<input type="text" name="category" placeholder="category..." required>
+				<button type="submit">Search</button>
+    </form>
+  </div>
+</div> 
 
-<body>
 
-	<c:url var="loadFavSellersLink" value="OnlineStoreControlServlet">
-		<c:param name="action" value="loadFriends" />
-	</c:url>
 
-	<c:url var="loadFavItemsLink" value="OnlineStoreControlServlet">
-		<c:param name="action" value="loadJokes" />
-	</c:url>
 
-	<nav class="cl-effect-1">
-
-		<a href="postItems.jsp"> Post New Items</a> 
-		<a
-			href="${loadFavSellersLink}">Favorite Sellers</a> 
-			
-			<a href="${loadFavItemsLink}">
-			My Favorite Items</a>
-<a href="homepage.jsp">Home</a>
-
-	
-	
 	</body>
 	</html>
